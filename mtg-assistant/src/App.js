@@ -56,4 +56,19 @@ class App extends Component {
   }
 }
 
+function searchCard(){
+  fetch('https://api.scryfall.com/cards/search',{
+    method: 'GET',
+    body: JSON.stringify({
+      q: document.getElementById('cardName').nodeValue
+    })
+  })
+        .then(res => res.json())
+        .then((data) => {
+          this.setState({ cardImage: data })
+        })
+        .catch(console.log)
+
+}
+
 export default App;
