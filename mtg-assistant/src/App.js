@@ -1,5 +1,6 @@
 import React , {Component} from "react"
 import CardDisplay from "./CardDisplay"
+import DeckList from "./DeckList"
 import './App.css';
 
 class App extends Component {
@@ -32,43 +33,38 @@ class App extends Component {
     .then((data) => {
       if(data.data != undefined){
         this.setState({cards: data.data})
+      }else{
+        this.setState({cards: []})
+      }
+
+      let correctCard = this.state.cards.find(card => card.name === this.state.cardName)
+      if(correctCard != undefined){
+        this.setState({displaySrc : correctCard.image_uris.normal})
+      }
+      else{
+        if(this.state.cards != []){
+          this.setState({displaySrc : this.state.cards[0].image_uris.normal})
+        }else{
+          this.setState({displaySrc : "https://gamepedia.cursecdn.com/mtgsalvation_gamepedia/f/f8/Magic_card_back.jpg"})
+        }
       }
     })
     .catch(console.log)
-
-    let correctCard = this.state.cards.find(card => card.name === this.state.cardName)
-    if(correctCard != undefined){
-      this.setState({displaySrc : correctCard.image_uris.normal})
-    }
-    else{
-      this.setState({displaySrc : "https://gamepedia.cursecdn.com/mtgsalvation_gamepedia/f/f8/Magic_card_back.jpg"})
-    }
   }
   
   render(){
     return(
       <div className="App">
+        <div>
+          <select><option value="1">Mazo 1</option></select>
+          <DeckList></DeckList>
+        </div>
         <input id="cardName" onChange={this.handleChange} type="text" value={this.state.cardName}></input>
         <button id="searchCard" onClick={this.searchCard}>Buscar</button>
         <CardDisplay displaySrc={this.state.displaySrc}></CardDisplay>
       </div>
     )
   }
-}
-
-function searchCard(){
-  fetch('https://api.scryfall.com/cards/search',{
-    method: 'GET',
-    body: JSON.stringify({
-      q: document.getElementById('cardName').nodeValue
-    })
-  })
-        .then(res => res.json())
-        .then((data) => {
-          this.setState({ cardImage: data })
-        })
-        .catch(console.log)
-
 }
 
 export default App;

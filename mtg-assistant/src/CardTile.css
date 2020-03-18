@@ -1,0 +1,10 @@
+.CardTile{
+    width: parent;
+    height: 20px;
+    border: 1px solid black;
+    margin-bottom: 2px;
+}
+
+.CardTile:hover{
+    background-color: lightgray;
+}
